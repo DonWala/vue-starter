@@ -1,52 +1,34 @@
 <template>
-    <div>
-        <h2>Zajêcia</h2>
-        <new-meeting-form @added="addNewMeeting($event)"></new-meeting-form>
-        <meetings-list :authenticatedUsername="authenticatedUsername" :meetings="meetings" @join="joinMeeting($event)"
-                       @leave="leaveMeeting($event)"
-                       @remove="removeMeeting($event)" />
-    </div>
+	<div>
+		<div v-if="!addMeetingClicked">
+			<button @click="clickAddNew()">Dodaj nowe spotkanie</button>
+		</div>
+		<div v-else>
+			<new-meeting-form @added="addNewMeeting($event)"></new-meeting-form>
+		</div>
+		<meetings-list :meetings="meetings" :username="username"></meetings-list>
+	</div>
 </template>
-
 <script>
-    import NewMeetingForm from "./NewMeetingForm";
-    import MeetingsList from "./MeetingsList";
-    export default {
-        components: {NewMeetingForm, MeetingsList},
-        name: "MeetingPage.vue",
-        props: ['authenticatedUsername'],
-        data() {
-            return {
-                meetings: [],
-                addingMeeting: false
-            };
-        },
-        methods: {
-            addNewMeeting(meeting) {
-                this.meetings.push(meeting);
-                this.addingMeeting = false;
-            },
-            joinMeeting(meetingName) {
-                for (let i = 0; i < this.meetings.length; i++) {
-                    if (this.meetings[i].name === meetingName) {
-                        this.meetings[i].participants.push(this.authenticatedUsername);
-                    }
-                }
-            },
-            leaveMeeting(meetingName) {
-                for (let i = 0; i < this.meetings.length; i++) {
-                    if (this.meetings[i].name === meetingName) {
-                        this.meetings[i].participants.splice(this.meetings[i].participants.indexOf(this.meetings[i]), 1);
-                    }
-                }
-            },
-            removeMeeting(meetingName) {
-                for (let i = 0; i < this.meetings.length; i++) {
-                    if (this.meetings[i].name === meetingName) {
-                        this.meetings.splice(i, 1);
-                    }
-                }
-            }
-        }
-    }
+	import NewMeetingForm from "./NewMeetingForm";
+	import MeetingsList from "./MeetingsList";
+	export default {
+		components: {NewMeetingForm, MeetingsList},
+		props: ['username', 'meetings'],
+		data() {
+			return {
+				addMeetingClicked: false
+			};
+		},
+		methods: {
+			clickAddNew() {
+				this.addMeetingClicked = true;
+			},
+			addNewMeeting(meeting) {
+				this.meetings.push(meeting);
+				this.addMeetingClicked = false;
+				this.$emit('meetings', this.meetings);
+			}
+		}
+	}
 </script>
