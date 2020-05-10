@@ -3,7 +3,7 @@
         <h1>Witaj w systemie do zapisów na zajęcia</h1>
 
         <div v-if="authenticatedUsername">
-            <user-panel :username="authenticatedUsername" @logout="logMeOut()"></user-panel>
+            <logged-in-page :username="authenticatedUsername" :meetings="meetings" @logout="logMeOut($event)"></logged-in-page>
         </div>
 
         <div v-else>
@@ -17,13 +17,14 @@
     import "milligram";
     import LoginForm from "./LoginForm";
     import UserPanel from "./UserPanel";
-    import MeetingsPage from "./meetings/MeetingsPage";
+    
 
     export default {
-        components: {LoginForm, MeetingsPage, UserPanel},
+        components: {LoginForm, UserPanel},
         data() {
             return {
                 authenticatedUsername: '',
+                meetings: [],
             }
         },
         methods: {
@@ -32,6 +33,7 @@
             },
             logMeOut() {
                 this.authenticatedUsername = '';
+                this.meetings = meetings;
             }
         }
     }
