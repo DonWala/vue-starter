@@ -13,9 +13,9 @@
 <script>
     import "milligram";
     import LoginForm from "./LoginForm";
-	import UserPanel from "./UserPanel";
+	import LoggedInPage from "./LoggedInPage";
     export default {
-        components: {LoginForm, UserPanel},
+        components: {LoginForm, LoggedInPage},
         data() {
             return {
                 authenticatedUsername: '',
